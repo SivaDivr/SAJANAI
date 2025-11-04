@@ -405,11 +405,24 @@ st.sidebar.header("Unread Emails")
 if not emails:
     st.sidebar.write("✅ No unread emails")
 else:
+    # subject_list = [f"{e['headers'].get('Subject','(No Subject)')} — {e['headers'].get('From','')}" for e in emails]
+    # selected_subject = st.sidebar.radio("Select email", subject_list)
+    # selected_index = subject_list.index(selected_subject)
+    # selected_email = emails[selected_index]
+    # st.session_state["selected_email"] = selected_email
     subject_list = [f"{e['headers'].get('Subject','(No Subject)')} — {e['headers'].get('From','')}" for e in emails]
     selected_subject = st.sidebar.radio("Select email", subject_list)
+    
     selected_index = subject_list.index(selected_subject)
     selected_email = emails[selected_index]
-    st.session_state["selected_email"] = selected_email
+    
+    # If user switched email, reset session state for dependent vars
+    if st.session_state.get("selected_email", {}).get("id") != selected_email["id"]:
+        st.session_state["selected_email"] = selected_email
+        # Reset dependent vars
+        for key in ["req", "faiss_result", "llm_result", "best_match", "draft_text",
+                    "gemini_parts", "included_attachments", "email_body"]:
+            st.session_state.pop(key, None)
 
 # Initialize session state containers
 st.session_state.setdefault("req", None)
