@@ -8,3 +8,4 @@ pandas
 numpy
 faiss-cpu
 sentence-transformers
+google-generativeai
