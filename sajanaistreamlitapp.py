@@ -27,7 +27,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.modify",
     "https://www.googleapis.com/auth/gmail.send"
 ]
-# MODEL = "gemini-2.5-pro"
+MODEL = "gemini-2.5-pro"
 # API_KEY = os.getenv("GEMINI_API_KEY")
 
 import streamlit as st
