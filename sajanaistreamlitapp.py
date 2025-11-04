@@ -55,25 +55,12 @@ client = genai.Client(api_key=API_KEY)
 
 #FOR STREAMLIT DEPLOYMENT
 def gmail_authenticate():
-    creds = None
+    # Load both credentials and token from Streamlit secrets
+    creds_data = json.loads(st.secrets["gmail"]["credentials"])
+    token_data = json.loads(st.secrets["gmail"]["token"])
 
-    # Load token.json from secrets if it exists
-    token_json = st.secrets.get("GMAIL_TOKEN_JSON")
-    if token_json:
-        creds = Credentials.from_authorized_user_info(json.loads(token_json), SCOPES)
-
-    # If no valid credentials, create new credentials
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            # Load credentials.json from secrets
-            credentials_info = st.secrets["GMAIL_CREDENTIALS_JSON"]
-            flow = InstalledAppFlow.from_client_config(credentials_info, SCOPES)
-            creds = flow.run_console()  # Use console flow in cloud environment
-
-        # Save token back to Streamlit secrets (optional)
-        st.session_state["GMAIL_TOKEN_JSON"] = creds.to_json()
+    # Create credentials object directly from token info
+    creds = Credentials.from_authorized_user_info(token_data, SCOPES)
 
     # Build Gmail service
     service = build("gmail", "v1", credentials=creds)
