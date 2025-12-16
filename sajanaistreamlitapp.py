@@ -1,6 +1,9 @@
 # sajan_ai_gmail.py
 import os
 import base64
+import os
+os.environ["TORCH_DISABLE_META"] = "1"
+
 import pandas as pd
 import streamlit as st
 from google.oauth2.credentials import Credentials
