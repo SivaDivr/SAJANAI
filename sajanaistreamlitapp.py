@@ -210,7 +210,16 @@ def safe_parse_extracted(extracted):
     return {"Product": None, "Form": None, "CU": None, "CapsaicinPercent": None, "Origin": None, "Notes": extracted}
 
 # ---------- VECTOR DB & PIS MATCH ----------
-encoder = SentenceTransformer('all-MiniLM-L6-v2')
+# encoder = SentenceTransformer('all-MiniLM-L6-v2')
+@st.cache_resource
+def load_encoder():
+    return SentenceTransformer(
+        "all-MiniLM-L6-v2",
+        device="cpu"
+    )
+
+encoder = load_encoder()
+
 
 def create_index():
     return faiss.IndexFlatL2(384)
